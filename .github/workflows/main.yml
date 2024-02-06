@@ -17,6 +17,9 @@ jobs:
             image_name: frontend
 
     steps:
+      - name: Install
+        run: pwd
+
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
