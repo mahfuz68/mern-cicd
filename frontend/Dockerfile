@@ -7,6 +7,7 @@ FROM node
 WORKDIR /app
 
 RUN pwd
+RUN ls
 COPY package.json ./
 
 
