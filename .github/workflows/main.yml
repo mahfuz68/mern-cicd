@@ -1,26 +1,37 @@
-name: Deploy to Digital Ocean
+name: Build and Push Docker images
 
 on:
   push:
     branches:
       - main
+
 jobs:
-  deploy:
+  build-and-push:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - context: ./backend
+            image_name: backend
+          - context: ./frontend
+            image_name: frontend
+
     steps:
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
+      - uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password:
-            ${{ secrets.DOCKERHUB_TOKEN }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-            # Build and push Backend Docker image
-
-      # Build and push Frontend Docker image
-      - name: Build and push Frontend Docker image
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          file: ./frontend/Dockerfile
+          context: ${{ matrix.context }}
+          file: ${{ matrix.context }}/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-frontend:latest
+          tags: yourusername/${{ matrix.image_name }}:latest
