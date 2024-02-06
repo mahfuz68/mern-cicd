@@ -14,7 +14,7 @@ USER root
 RUN chown -R app:app .
 
 # change the user back to the app user
-USER app
+USER root
 
 RUN npm install
 
