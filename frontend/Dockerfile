@@ -8,6 +8,8 @@ WORKDIR /app
 
 COPY package.json ./
 
+RUN pwd
+
 RUN npm install
 
 COPY . .
