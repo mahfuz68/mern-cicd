@@ -6,9 +6,10 @@ FROM node
 
 WORKDIR /app
 
+RUN pwd
 COPY package.json ./
 
-RUN pwd
+
 
 RUN npm install
 
