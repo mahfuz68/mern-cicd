@@ -4,13 +4,13 @@ version: "3.8"
 # define the services/containers to be run
 services:
   web:
-    depends_on: 
+    depends_on:
       - api
-    build: ./frontend
+    image: mahfuz4433/frontend:latest
     ports:
-      - 5173:5173
+      - 80:5173
     environment:
-      VITE_API_URL: https://obscure-space-pancake-v74r5p7gjj9hp5j7-8000.app.github.dev
+      VITE_API_URL: http://api:8000
 
     develop:
       watch:
@@ -22,27 +22,25 @@ services:
           target: /app
           action: sync
 
-  api: 
-    depends_on: 
+  api:
+    depends_on:
       - db
 
-    build: ./backend
-    
-    ports: 
+    image: mahfuz4433/backend:latest
+
+    ports:
       - 8000:8000
 
-  
-    environment: 
+    environment:
       DB_URL: mongodb://db/anime
-    
-    develop:
 
+    develop:
       watch:
         - path: ./backend/package.json
           action: rebuild
         - path: ./backend/package-lock.json
           action: rebuild
-        
+
         - path: ./backend
           target: /app
           action: sync
