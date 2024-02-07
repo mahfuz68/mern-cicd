@@ -8,6 +8,14 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - context: ./backend
+            image_name: backend
+          - context: ./frontend
+            image_name: frontend
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -23,12 +31,6 @@ jobs:
 
       - name: Build and Push Backend Docker image (if deploying to DockerHub)
         run: |
-          cd backend
-          docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:${{ github.sha }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend:${{ github.sha }}
-
-      - name: Build and Push Frontend Docker image (if deploying to DockerHub)
-        run: |
-          cd frontend
-          docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ github.sha }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/frontend:${{ github.sha }}
+          cd ${{ matrix.context }}
+          docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image_name }}:${{ github.sha }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image_name }}:${{ github.sha }}
