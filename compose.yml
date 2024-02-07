@@ -10,7 +10,7 @@ services:
     ports:
       - 80:80
     environment:
-      VITE_API_URL: api
+      VITE_API_URL: api:8000
 
     develop:
       watch:
