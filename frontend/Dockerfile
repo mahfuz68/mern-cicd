@@ -1,21 +1,12 @@
-FROM node
-
-# RUN addgroup app && adduser -S -G app app
-
-# USER app
+FROM node:latest as build-stage
 
 WORKDIR /app
-
-RUN pwd
-RUN ls
-COPY package.json ./
-
-
+COPY package*.json ./
 
 RUN npm install
-
 COPY . .
-
-EXPOSE 5173
-
-CMD npm run dev
+RUN npm run build
+FROM nginx:stable-alpine as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
