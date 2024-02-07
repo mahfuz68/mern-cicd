@@ -1,7 +1,7 @@
 # specify the version of docker-compose
 version: "3.8"
 
-# define the services/containers to be run
+# define the services/containers to be run dd
 services:
   web:
     depends_on:
