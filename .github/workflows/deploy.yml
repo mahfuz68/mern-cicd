@@ -34,14 +34,14 @@ jobs:
           cd ${{ matrix.context }}
           docker build . -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image_name }}:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image_name }}:latest
-      - name: Copy files to server
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "."
-          target: "/home/project"
+      # - name: Copy files to server
+      #   uses: appleboy/scp-action@master
+      #   with:
+      #     host: ${{ secrets.SERVER_IP }}
+      #     username: ${{ secrets.SERVER_USER }}
+      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     source: "."
+      #     target: "/home/project"
 
       - name: Deploy using Docker Compose on server
         uses: appleboy/ssh-action@master
