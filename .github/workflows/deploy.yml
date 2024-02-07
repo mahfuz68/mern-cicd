@@ -43,14 +43,20 @@ jobs:
       #     source: "."
       #     target: "/home/project"
 
-      - name: Deploy using Docker Compose on server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd /home/project
-            docker compose down
-            docker compose pull
-            docker compose up -d
+deploy:
+  runs-on: ubuntu-latest
+
+  needs: build
+
+  steps:
+    - name: Deploy using Docker Compose on server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /home/project
+          docker compose down
+          docker compose pull
+          docker compose up -d
